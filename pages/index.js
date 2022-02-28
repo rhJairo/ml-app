@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import * as mobilenet from '@tensorflow-models/mobilenet'
+require('@tensorflow/tfjs-core'); /* or @tensorflow/tfjs-node */
+require('@tensorflow/tfjs-backend-cpu');
 import { useState, useEffect, useRef } from 'react'
 
 
@@ -15,11 +17,12 @@ export default function Home(props) {
   const loadModel = async () => {
     setIsModelLoading(true)
     try{
-      const model = await mobilenet.load()
+      let model = await mobilenet.load()
+      console.log('model loaded')
       setModel(model)
       setIsModelLoading(false)
     }catch(e){
-      console.error(e)
+      console.log(e)
       setIsModelLoading(false)
     }
   }
@@ -42,8 +45,6 @@ export default function Home(props) {
   if(isModelLoading){
     return <h2>Model loading... </h2>
   }
-
-  console.log(imageURL)
 
   return (
     <div className={styles.container}>
